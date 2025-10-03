@@ -120,7 +120,7 @@ export default function Home() {
         }}
       >
         <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", marginBottom: "15px", fontWeight: "bold" }}>
-          ✨ Modeling School Portal
+          ✨Welcome to Modeling School Portal
         </h1>
         <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)", maxWidth: "700px", margin: "0 auto", lineHeight: "1.6", opacity: 0.95 }}>
           Train with the best. Walk the runway. Shine with confidence.
