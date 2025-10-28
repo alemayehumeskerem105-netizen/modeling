@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -6,6 +6,8 @@ export default function Home() {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [lightboxImg, setLightboxImg] = useState(null);
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const aboutRef = useRef(null);
+  const contactRef = useRef(null);
 
   const testimonials = [
     "“After joining, I landed my first modeling contract in 3 months!” – Student",
@@ -22,7 +24,6 @@ export default function Home() {
     "https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg",
   ];
 
-  // Rotate testimonials
   useEffect(() => {
     const interval = setInterval(() => {
       setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
@@ -30,12 +31,15 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Show top button
   useEffect(() => {
     const handleScroll = () => setShowTopBtn(window.scrollY > 300);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const scrollToSection = (ref) => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div
@@ -66,22 +70,27 @@ export default function Home() {
         }}
       >
         <h2 style={{ margin: 0, fontSize: "clamp(1.2rem, 3vw, 1.8rem)" }}>
-          🌟 Modeling School
+          🌟 Yam Modeling School
         </h2>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            flexWrap: "wrap",
+          }}
+        >
           <nav style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
             <Link to="/" style={headerLinkStyle}>
               Home
             </Link>
-            <Link to="/about" style={headerLinkStyle}>
+            <span style={headerLinkStyle} onClick={() => scrollToSection(aboutRef)}>
               About
-            </Link>
-            <Link to="/contact" style={headerLinkStyle}>
+            </span>
+            <span style={headerLinkStyle} onClick={() => scrollToSection(contactRef)}>
               Contact
-            </Link>
+            </span>
           </nav>
-
           <button
             onClick={() => setDarkMode(!darkMode)}
             style={{
@@ -107,28 +116,74 @@ export default function Home() {
           maxWidth: "1100px",
           textAlign: "center",
           borderRadius: "20px",
-          backgroundImage: `linear-gradient(
-            rgba(0,0,0,${darkMode ? 0.7 : 0.3}),
-            rgba(0,0,0,${darkMode ? 0.7 : 0.3})
-          ), url('https://images.pexels.com/photos/3760851/pexels-photo-3760851.jpeg')`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,${darkMode ? 0.7 : 0.3}), rgba(0,0,0,${
+            darkMode ? 0.7 : 0.3
+          })), url('https://images.pexels.com/photos/3760851/pexels-photo-3760851.jpeg')`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "cover",
           color: "#fff",
           boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
-          transition: "0.5s ease-in-out",
         }}
       >
-        <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", marginBottom: "15px", fontWeight: "bold" }}>
-          ✨Welcome to Modeling School Portal
+        <h1
+          style={{
+            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+            marginBottom: "15px",
+            fontWeight: "bold",
+          }}
+        >
+          ✨Welcome to Yam Modeling School Portal
         </h1>
-        <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)", maxWidth: "700px", margin: "0 auto", lineHeight: "1.6", opacity: 0.95 }}>
+        <p
+          style={{
+            fontSize: "clamp(1rem, 2.5vw, 1.3rem)",
+            maxWidth: "700px",
+            margin: "0 auto",
+            lineHeight: "1.6",
+          }}
+        >
           Train with the best. Walk the runway. Shine with confidence.
         </p>
       </section>
 
-      {/* Login / Signup */}
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "15px", marginTop: "30px" }}>
+      {/* 🎥 Video Section (updated) */}
+      <section style={{ marginTop: "50px", textAlign: "center" }}>
+        <h2
+          style={{
+            fontSize: "clamp(1.4rem, 3vw, 2rem)",
+            marginBottom: "20px",
+          }}
+        >
+          🎬 Watch Our Training Session
+        </h2>
+        <video
+          width="80%"
+          controls
+          style={{
+            borderRadius: "20px",
+            boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
+            maxWidth: "900px",
+          }}
+        >
+          <source
+            src="https://youtu.be/pJ3QFbZ4ecI?si=2xNjGdrYDJQnlXzV"
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video>
+      </section>
+
+      {/* Buttons */}
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "15px",
+          marginTop: "30px",
+        }}
+      >
         <Link to="/login" style={buttonStyle("#4CAF50")}>
           🔑 Login
         </Link>
@@ -138,27 +193,87 @@ export default function Home() {
       </div>
 
       {/* Features */}
-      <section style={{ marginTop: "60px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px", maxWidth: "1000px", marginInline: "auto" }}>
+      <section
+        style={{
+          marginTop: "60px",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: "20px",
+          maxWidth: "1000px",
+          marginInline: "auto",
+        }}
+      >
         {[
-          { title: "Runway Training", desc: "Master the walk with world-class coaches.", img: "https://cdn-icons-png.flaticon.com/512/814/814513.png" },
-          { title: "Photoshoot Prep", desc: "Learn posing and expressions for modeling.", img: "https://cdn-icons-png.flaticon.com/512/2922/2922730.png" },
-          { title: "Career Guidance", desc: "Get industry insights from professionals.", img: "https://cdn-icons-png.flaticon.com/512/3135/3135755.png" },
-          { title: "Networking", desc: "Connect with agencies and fashion houses.", img: "https://cdn-icons-png.flaticon.com/512/1256/1256650.png" },
+          {
+            title: "Runway Training",
+            desc: "Master the walk with world-class coaches.",
+            img: "https://cdn-icons-png.flaticon.com/512/814/814513.png",
+          },
+          {
+            title: "Photoshoot Prep",
+            desc: "Learn posing and expressions for modeling.",
+            img: "https://cdn-icons-png.flaticon.com/512/2922/2922730.png",
+          },
+          {
+            title: "Career Guidance",
+            desc: "Get industry insights from professionals.",
+            img: "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
+          },
+          {
+            title: "Networking",
+            desc: "Connect with agencies and fashion houses.",
+            img: "https://cdn-icons-png.flaticon.com/512/1256/1256650.png",
+          },
         ].map((f, i) => (
           <FeatureCard key={i} title={f.title} desc={f.desc} img={f.img} />
         ))}
       </section>
 
+      {/* About Section */}
+      <section
+        ref={aboutRef}
+        style={{ marginTop: "80px", textAlign: "center", padding: "40px 20px" }}
+      >
+        <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2.2rem)" }}>📖 About Us</h2>
+        <p
+          style={{
+            maxWidth: "800px",
+            margin: "20px auto",
+            lineHeight: "1.6",
+          }}
+        >
+          Yam Modeling School is Ethiopia’s leading modeling academy, helping
+          students develop confidence, professionalism, and runway excellence.
+          We offer personalized coaching, photo sessions, and international
+          exposure opportunities.
+        </p>
+      </section>
+
       {/* Gallery */}
       <section style={{ marginTop: "70px", textAlign: "center" }}>
-        <h2 style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>📸 Modeling School Gallery</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "15px", marginTop: "20px", maxWidth: "1000px", marginInline: "auto" }}>
+        <h2 style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>📸 Gallery</h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "15px",
+            marginTop: "20px",
+            maxWidth: "1000px",
+            marginInline: "auto",
+          }}
+        >
           {gallery.map((url, i) => (
             <img
               key={i}
               src={url}
-              alt={`Modeling ${i}`}
-              style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "15px", cursor: "pointer", transition: "0.3s" }}
+              alt={`Gallery ${i}`}
+              style={{
+                width: "100%",
+                height: "200px",
+                objectFit: "cover",
+                borderRadius: "15px",
+                cursor: "pointer",
+              }}
               onClick={() => setLightboxImg(url)}
             />
           ))}
@@ -167,86 +282,63 @@ export default function Home() {
 
       {/* Lightbox */}
       {lightboxImg && (
-        <div onClick={() => setLightboxImg(null)} style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.8)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999, cursor: "pointer" }}>
-          <img src={lightboxImg} alt="Enlarged" style={{ maxWidth: "95%", maxHeight: "85%", borderRadius: "12px" }} />
+        <div
+          onClick={() => setLightboxImg(null)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <img
+            src={lightboxImg}
+            alt="Enlarged"
+            style={{ maxWidth: "95%", maxHeight: "85%", borderRadius: "12px" }}
+          />
         </div>
       )}
 
-      {/* Testimonials */}
-      <section style={{ marginTop: "70px", textAlign: "center" }}>
-        <h2 style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>⭐ Success Stories</h2>
-        <p style={{ maxWidth: "600px", margin: "10px auto", opacity: 0.8 }}>
-          {testimonials[testimonialIndex]}
+      {/* Contact Section */}
+      <section
+        ref={contactRef}
+        style={{
+          marginTop: "100px",
+          textAlign: "center",
+          padding: "60px 20px",
+          background: darkMode ? "#2a2438" : "#f5f5f5",
+        }}
+      >
+        <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2.2rem)" }}>📞 Contact Us</h2>
+        <p>
+          Email: <strong>info@yammodelingschool.com</strong>
         </p>
-      </section>
-
-      {/* Stats / Achievements */}
-      <section style={{ textAlign: "center", marginTop: "80px" }}>
-        <h2 style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>🎯 Achievements</h2>
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "40px", marginTop: "30px" }}>
-          {[
-            { label: "Students Enrolled", value: 250 },
-            { label: "Contracts Signed", value: 80 },
-            { label: "Photoshoots Done", value: 120 },
-          ].map((stat, i) => (
-            <div key={i} style={{ fontSize: "1.2rem", minWidth: "150px" }}>
-              <strong style={{ fontSize: "2rem", color: "#FF4081" }}>{stat.value}+</strong>
-              <p>{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Video Section */}
-      <section style={{ textAlign: "center", marginTop: "70px" }}>
-        <h2 style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>🎬 Watch Our Journey</h2>
-        <div style={{ marginTop: "20px" }}>
-          <iframe
-            width="80%"
-            height="400"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-            title="Modeling School Promo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{ borderRadius: "15px" }}
-          ></iframe>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section style={{ maxWidth: "900px", margin: "80px auto", padding: "0 20px" }}>
-        <h2 style={{ textAlign: "center", fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>❓ Frequently Asked Questions</h2>
-        {[
-          { q: "Do I need prior experience?", a: "No, we welcome beginners and advanced students." },
-          { q: "What is the duration of the program?", a: "Our courses range from 3 to 12 months depending on specialization." },
-          { q: "Are online classes available?", a: "Yes, we offer live and recorded sessions online." },
-        ].map((item, i) => (
-          <div key={i} style={{ marginTop: "20px", padding: "15px", borderRadius: "10px", background: "#f1f1f1" }}>
-            <h4 style={{ marginBottom: "5px" }}>Q: {item.q}</h4>
-            <p>A: {item.a}</p>
-          </div>
-        ))}
-      </section>
-
-      {/* Newsletter */}
-      <section style={{ textAlign: "center", marginTop: "70px", marginBottom: "70px" }}>
-        <h2 style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>📩 Stay Updated</h2>
-        <p>Subscribe to our newsletter for latest updates and offers.</p>
-        <input
-          type="email"
-          placeholder="Your email"
-          style={{ padding: "12px 20px", borderRadius: "25px", border: "1px solid #ccc", marginRight: "10px", width: "250px", maxWidth: "80%" }}
-        />
-        <button style={{ ...buttonStyle("#FF4081") }}>Subscribe</button>
+        <p>
+          Phone: <strong>+251 911 234 567</strong>
+        </p>
+        <p>Address: Addis Ababa, Ethiopia</p>
       </section>
 
       {/* Footer */}
-      <footer style={{ marginTop: "50px", opacity: 0.8, fontSize: "0.9rem", textAlign: "center", padding: "20px" }}>
-        © {new Date().getFullYear()} Modeling School Portal. All Rights Reserved.
+      <footer
+        style={{
+          marginTop: "50px",
+          opacity: 0.8,
+          fontSize: "0.9rem",
+          textAlign: "center",
+          padding: "20px",
+        }}
+      >
+        © {new Date().getFullYear()} Yam Modeling School. All Rights Reserved.
       </footer>
 
-      {/* Back to top button */}
+      {/* Back to top */}
       {showTopBtn && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -271,7 +363,6 @@ export default function Home() {
   );
 }
 
-// Styles
 const buttonStyle = (color) => ({
   padding: "14px 32px",
   backgroundColor: color,
@@ -287,6 +378,7 @@ const headerLinkStyle = {
   textDecoration: "none",
   fontWeight: "bold",
   fontSize: "clamp(0.9rem, 2vw, 1rem)",
+  cursor: "pointer",
 };
 
 function FeatureCard({ title, desc, img }) {
@@ -310,9 +402,22 @@ function FeatureCard({ title, desc, img }) {
         e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.15)";
       }}
     >
-      <img src={img} alt={title} style={{ width: "60px", height: "60px", marginBottom: "15px" }} />
-      <h3 style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)", marginBottom: "10px" }}>{title}</h3>
-      <p style={{ fontSize: "clamp(0.9rem, 2vw, 1rem)", opacity: 0.85 }}>{desc}</p>
+      <img
+        src={img}
+        alt={title}
+        style={{ width: "60px", height: "60px", marginBottom: "15px" }}
+      />
+      <h3
+        style={{
+          fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
+          marginBottom: "10px",
+        }}
+      >
+        {title}
+      </h3>
+      <p style={{ fontSize: "clamp(0.9rem, 2vw, 1rem)", opacity: 0.85 }}>
+        {desc}
+      </p>
     </div>
   );
 }

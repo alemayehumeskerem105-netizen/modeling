@@ -1,100 +1,78 @@
-// src/pages/Signup.js
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-function Signup() {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
+export default function Signup() {
+const [form, setForm] = useState({
+email: "",
+name: "",
+password: "",
+});
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const handleChange = (e) => {
+setForm({ ...form, [e.target.name]: e.target.value });
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+e.preventDefault();
+alert(`Signed up!\n\nEmail: ${form.email}\nName: ${form.name}`);
+setForm({ email: "", name: "", password: "" });
+};
 
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.password) {
-      setError("All fields are required!");
-      return;
-    }
-
-    // Save user data in localStorage (temporary)
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = users.find((u) => u.email === formData.email);
-
-    if (userExists) {
-      setError("User already exists!");
-      return;
-    }
-
-    users.push({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-    });
-    localStorage.setItem("users", JSON.stringify(users));
-
-    // Redirect to login
-    navigate("/login");
-  };
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"
-          >
-            Sign Up
-          </button>
-        </form>
-
-        <p className="mt-4 text-sm text-center">
-          Already have an account?{" "}
-          <button
-            onClick={() => navigate("/login")}
-            className="text-blue-500 hover:underline"
-          >
-            Log In
-          </button>
-        </p>
-      </div>
-    </div>
-  );
+return (
+<div
+style={{
+maxWidth: "400px",
+margin: "60px auto",
+padding: "30px",
+borderRadius: "12px",
+backgroundColor: "#fff",
+boxShadow: "0 6px 18px rgba(0, 0, 0, 0.1)",
+}}
+>
+<h2 style={{ textAlign: "center", marginBottom: "20px" }}>Signup</h2>
+<form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}> <label>
+Email:
+<input
+type="email"
+name="email"
+value={form.email}
+onChange={handleChange}
+required
+placeholder="Enter your email"
+style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ccc" }}
+/> </label> <label>
+Name:
+<input
+type="text"
+name="name"
+value={form.name}
+onChange={handleChange}
+required
+placeholder="Enter your name"
+style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ccc" }}
+/> </label> <label>
+Password:
+<input
+type="password"
+name="password"
+value={form.password}
+onChange={handleChange}
+required
+placeholder="Enter your password"
+style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ccc" }}
+/> </label>
+<button
+type="submit"
+style={{
+padding: "12px",
+background: "#4CAF50",
+color: "white",
+border: "none",
+borderRadius: "8px",
+cursor: "pointer",
+fontSize: "16px",
+marginTop: "10px",
+}}
+>
+Sign Up </button> </form> </div>
+);
 }
-
-export default Signup;

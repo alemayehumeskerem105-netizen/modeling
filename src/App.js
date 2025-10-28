@@ -4,23 +4,17 @@ import Home from "./pages/home";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/UserDashboard";
-import ContactAdmin from "./pages/ContactAdmin";
 import Signup from "./pages/Signup";
-import Contact from "./pages/Contact";
-import About from "./pages/About";  // ✅ Import About page
-
-
 
 function App() {
+  // ✅ App states
   const [students, setStudents] = useState(() => JSON.parse(localStorage.getItem("students")) || []);
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem("cart")) || []);
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")) || null);
   const [messages, setMessages] = useState(() => JSON.parse(localStorage.getItem("messages")) || []);
+  const [darkMode, setDarkMode] = useState(false); // ✅ Dark mode state
 
-  // ✅ Dark mode state
-  const [darkMode, setDarkMode] = useState(false);
-
-  // Persist data
+  // ✅ Persist data to localStorage
   useEffect(() => localStorage.setItem("students", JSON.stringify(students)), [students]);
   useEffect(() => localStorage.setItem("cart", JSON.stringify(cart)), [cart]);
   useEffect(() => localStorage.setItem("messages", JSON.stringify(messages)), [messages]);
@@ -39,10 +33,13 @@ function App() {
         }}
       >
         <Routes>
+          {/* ✅ Home page now includes About and Contact sections inside */}
           <Route path="/" element={<Home darkMode={darkMode} setDarkMode={setDarkMode} />} />
-          <Route path="/login" element={<Login setUser={setUser} />} />
-          <Route path="/contact" element={<Contact darkMode={darkMode} />} />
 
+          {/* ✅ Login page */}
+          <Route path="/login" element={<Login setUser={setUser} />} />
+
+          {/* ✅ User Dashboard - Protected Route */}
           <Route
             path="/user"
             element={
@@ -58,21 +55,7 @@ function App() {
             }
           />
 
-          <Route
-            path="/contact-admin"
-            element={
-              user ? (
-                <ContactAdmin
-                  messages={messages}
-                  setMessages={setMessages}
-                  user={user}
-                />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            }
-          />
-
+          {/* ✅ Admin Dashboard - Protected Route */}
           <Route
             path="/admin"
             element={
@@ -88,14 +71,13 @@ function App() {
               )
             }
           />
-          <Route path="/about" element={<About darkMode={darkMode} />} />
 
-
+          {/* ✅ Signup page */}
           <Route path="/signup" element={<Signup />} />
+
+          {/* Redirect all unknown routes to Home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-
-
       </div>
     </Router>
   );
